@@ -1,22 +1,25 @@
-name: ECN Distribution
+name: Adobe Sign Alert
 on:
   repository_dispatch:
-    types: [adobe_doc_signed]  # Matches the event_type from your webhook
+    types: [adobe_doc_signed] # Must match $EventType in your PowerShell
 
 jobs:
-  distribute:
+  send-notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
         with:
-          python-version: '3.10'
-
-      - name: Run Distribution Script
-        env:
-          MS_GRAPH_TOKEN: ${{ secrets.MS_GRAPH_TOKEN }} # From Step 3
-          ECN_DATA: ${{ github.event.client_payload }}
-        run: python send_distro.py
+          # Gmail SMTP Server Settings
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          # Pull from your GitHub Secrets
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Adobe Sign: Document Completed!"
+          to: ${{ secrets.DESTINATION_EMAIL }}
+          from: "Adobe Automation <${{ secrets.MAIL_USERNAME }}>"
+          body: |
+            The document has been successfully signed.
+            Timestamp: ${{ github.event.client_payload.timestamp }}

@@ -1,7 +1,7 @@
 name: ECN Distribution
 on:
   repository_dispatch:
-    types: [ecn_completed]  # Matches the event_type from your webhook
+    types: [adobe_doc_signed]  # Matches the event_type from your webhook
 
 jobs:
   distribute:

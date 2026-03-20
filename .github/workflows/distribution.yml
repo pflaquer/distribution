@@ -1,0 +1,22 @@
+name: ECN Distribution
+on:
+  repository_dispatch:
+    types: [ecn_completed]  # Matches the event_type from your webhook
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run Distribution Script
+        env:
+          MS_GRAPH_TOKEN: ${{ secrets.MS_GRAPH_TOKEN }} # From Step 3
+          ECN_DATA: ${{ github.event.client_payload }}
+        run: python send_distro.py

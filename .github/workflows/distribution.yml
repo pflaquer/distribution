@@ -16,9 +16,10 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           # ACCESS THE PAYLOAD HERE:
-          subject: "Signed: ${{ github.event.client_payload.doc_name }}"
+          subject: "***${{ github.event.client_payload.doc_name }}***"
           to: ${{ secrets.DESTINATION_EMAIL }}
-          from: "Adobe Automation <${{ secrets.MAIL_USERNAME }}>"
+          from: "Pablo Flaquer <pflaquer@abec.com>"
+          reply_to: "pflaquer@abec.com"
           body: |
             The following document was signed: ${{ github.event.client_payload.doc_name }}
             Processed at: ${{ github.event.client_payload.timestamp }}
